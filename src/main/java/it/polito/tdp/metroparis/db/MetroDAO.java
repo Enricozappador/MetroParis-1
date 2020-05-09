@@ -68,5 +68,36 @@ public class MetroDAO {
 		return linee;
 	}
 
+	public boolean fermateConnesse(Fermata fp, Fermata fa) {
+		String sql="SELECT COUNT (*) AS C FROM connessione WHERE id_stazP=? AND id_stazA=?"; 
+		
+		
+		
+		try {
+			Connection conn = DBConnect.getConnection(); 
+			PreparedStatement st = conn.prepareStatement(sql);
+			
+			st.setInt(1, fp.getIdFermata());
+			st.setInt(2, fa.getIdFermata());
+			
+			ResultSet res = st.executeQuery(); 
+			
+			res.first();
+			int linee = res.getInt("C"); 
+			
+			conn.close();
+			
+			return (linee >=1); 
+			
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return false; 
+		
+	}
 
 }
