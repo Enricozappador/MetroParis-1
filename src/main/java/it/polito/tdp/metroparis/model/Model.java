@@ -31,6 +31,7 @@ public class Model {
 		this.fermate = dao.getAllFermate(); 
 		this.fermateIdMap = new HashMap<>(); 
 		
+		
 		for(Fermata f : this.fermate ) {
 			fermateIdMap.put(f.getIdFermata(), f); 
 		}
