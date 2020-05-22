@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.event.ConnectedComponentTraversalEvent;
 import org.jgrapht.event.EdgeTraversalEvent;
 import org.jgrapht.event.TraversalListener;
@@ -60,7 +62,7 @@ public class Model {
 		
 		List<CoppieFermate> coppie = dao.coppieFermate(fermateIdMap); 
 		for(CoppieFermate c : coppie){
-			this.graph.addEdge(c.getFp(), c.getFp()); 
+			this.graph.addEdge(c.getFp(), c.getFa ()); 
 		}
 		
 		System.out.format("Grafo caricato con %d vertici %d archi", this.graph.vertexSet().size(), this.graph.edgeSet().size()); 
@@ -137,6 +139,15 @@ public class Model {
 		
 		
 	}
+	
+	public List<Fermata> camminiMinimi(Fermata partenza, Fermata arrivo) {
+		
+		DijkstraShortestPath<Fermata, DefaultEdge> dij= new DijkstraShortestPath<>(graph);
+		
+	GraphPath<Fermata, DefaultEdge>  cammino = 	dij.getPath(partenza, arrivo); 
+	
+	return cammino.getVertexList(); 
+	}
 	public static void main(String args[]) {
 		Model m = new Model(); 
 		
@@ -149,6 +160,9 @@ public class Model {
 		for(Fermata f : albero.keySet()) {
 			System.out.format("%s -> %s\n", f, albero.get(f)); 
 		}
+		
+		List<Fermata> cammino = m.camminiMinimi(m.fermate.get(0), m.fermate.get(1)); 
+		System.out.println(cammino); 
 	}
 
 }
